@@ -1,0 +1,23 @@
+﻿@model ResidentEvil.Models.Entry
+
+<div class="container mt-4 text-white">
+    <h1 class="text-info border-bottom border-info pb-2">GAME DATA: @Model.Name</h1>
+    
+    <div class="mt-4 p-4 bg-dark border border-secondary rounded">
+        <dl class="row">
+            <dt class="col-sm-3 text-info">Title</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+            <dt class="col-sm-3 text-info">Release Year</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ReleaseYear)</dd>
+
+            <dt class="col-sm-3 text-info">Platform</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Platform)</dd>
+        </dl>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit Records</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Archive</a>
+    </div>
+</div>

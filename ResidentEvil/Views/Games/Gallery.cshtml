@@ -1,0 +1,49 @@
+@model IEnumerable<ResidentEvil.Models.GalleryItem>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-danger">SECURE GALLERY</h1>
+        <a asp-controller="Games" asp-action="AddPhoto" class="btn btn-danger">+ ADD PHOTO</a>
+    </div>
+
+    <div class="row">
+        @* verificare *@
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card bg-dark border-secondary h-100 shadow">
+                        @* Afișăm imaginea trimisă (pe net sau locală) *@
+                        <img src="@item.ImageUrl" class="card-img-top" style="height: 180px; object-fit: cover;" alt="Evidence">
+
+                        <div class="card-body p-2 text-center">
+                            @* NOU: Afișăm Caption-ul completat în formular *@
+                            <h6 class="text-danger fw-bold mb-1 text-uppercase">
+                                @(string.IsNullOrEmpty(item.Caption) ? "No Caption" : item.Caption)
+                            </h6>
+
+                            <p class="text-white small mb-2">Subject: @(item.Entry?.Name ?? "Unknown")</p>
+
+                            <div class="d-flex gap-2 justify-content-center">
+                                @* edit e un link (GET) *@
+                                <a asp-action="EditPhoto" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Edit</a>
+
+                                @* delete post formular *@
+                                <form asp-action="DeletePhoto" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Confirm archive deletion?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center mt-4">
+                <p class="text-muted">No evidence files discovered in the archive.</p>
+            </div>
+        }
+    </div>
+</div>

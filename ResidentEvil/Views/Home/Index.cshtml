@@ -1,0 +1,66 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h1>Resident Evil Database</h1>
+
+<div class="row justify-content-center mb-5">
+    <div class="col-md-5">
+        <div class="wiki-card">
+            <p class="large-text">Welcome to the Resident Evil Wiki!</p>
+            <p>
+                This is a database for the Resident Evil universe, focusing on the Capcom's Resident Evil franchise...
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-3 mb-4">
+        <a asp-controller="Home" asp-action="Requiem" class="game-link">
+            <div class="game-box">
+                <img src="~/photos/re9.jpg" class="game-img" alt="RE Requiem">
+                <div class="game-info">
+                    <h6><i>Resident Evil Requiem</i></h6>
+                    <span>(2026)</span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <a asp-controller="Home" asp-action="re4" class="game-link">
+            <div class="game-box">
+                <img src="~/photos/re4.jpg" class="game-img" alt="RE4 Remake">
+                <div class="game-info">
+                    <h6><i>Resident Evil 4</i></h6>
+                    <span>(2023)</span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <a asp-controller="Home" asp-action="revillage" asp-route-id="3" class="game-link">
+            <div class="game-box">
+                <img src="~/photos/revillage.jpg" class="game-img" alt="RE Village">
+                <div class="game-info">
+                    <h6><i>Resident Evil Village</i></h6>
+                    <span>(2021)</span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <a asp-controller="Home" asp-action="re3" asp-route-id="4" class="game-link">
+            <div class="game-box">
+                <img src="~/photos/re3.jpg" class="game-img" alt="RE3 Remake">
+                <div class="game-info">
+                    <h6><i>Resident Evil 3</i></h6>
+                    <span>(2020)</span>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

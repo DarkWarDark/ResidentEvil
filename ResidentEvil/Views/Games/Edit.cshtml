@@ -1,0 +1,35 @@
+﻿@model ResidentEvil.Models.Entry
+
+<div class="container mt-4 text-white">
+    <h2 class="text-warning">EDIT GAME: @Model.Name</h2>
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control bg-dark text-white border-warning" />
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="Category" class="control-label ">ENTRY TYPE</label>
+            <select asp-for="Category" class="form-control bg-dark text-white border-warning shadow-sm">
+                <option value="Game">Game</option>
+                <option value="Character">Character</option>
+                <option value="Location">Location</option>
+            </select>
+            <span asp-validation-for="Category" class="text-warning small"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ReleaseYear" class="form-label"></label>
+            <input asp-for="ReleaseYear" class="form-control bg-dark text-white border-warning" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Platform" class="form-label"></label>
+            <input asp-for="Platform" class="form-control bg-dark text-white border-warning" />
+        </div>
+        <div class="form-group">
+            <label>Page Name (RE4, Village, etc.)</label>
+            <input asp-for="PageName" class="form-control bg-dark text-white border-warning"   />
+        </div>
+        <button type="submit" class="btn btn-warning">Update</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

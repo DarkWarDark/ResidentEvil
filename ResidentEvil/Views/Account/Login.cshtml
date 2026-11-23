@@ -1,0 +1,39 @@
+﻿<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card bg-dark border-warning text-white shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0">ARCHIVE ACCESS LOGIN</h3>
+                </div>
+                <div class="card-body">
+
+                    <form asp-action="Login" method="post">
+
+                        @* IMPORTANT: Aici vor apărea erorile cu roșu dacă greșești parola/userul *@
+                        <div asp-validation-summary="All" class="text-danger small mb-3 fw-bold"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            @* name="username" trebuie să fie exact ca parametrul din controller *@
+                            <input name="username" type="text" class="form-control bg-secondary text-white border-0" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            @* name="password" trebuie să fie exact ca parametrul din controller *@
+                            <input name="password" type="password" class="form-control bg-secondary text-white border-0" required />
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input name="rememberMe" type="checkbox" value="true" class="form-check-input" id="rememberMe" />
+                            <label class="form-check-label text-muted" for="rememberMe">Remember Session</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning text-dark w-100 fw-bold">AUTHENTICATE</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

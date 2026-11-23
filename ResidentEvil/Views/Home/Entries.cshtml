@@ -1,0 +1,97 @@
+@model IEnumerable<ResidentEvil.Models.Entry>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-danger">ARCHIVED ENTRIES</h2>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-controller="Games" asp-action="Create" class="btn btn-outline-danger">Create New Page</a>
+        }
+    </div>
+
+    <div class="btn-group mb-4" role="group">
+        <button type="button" class="btn btn-outline-secondary active filter-btn" onclick="filterEntries('all', this)">All</button>
+        <button type="button" class="btn btn-outline-danger filter-btn" onclick="filterEntries('Game', this)">Games</button>
+        <button type="button" class="btn btn-outline-info filter-btn" onclick="filterEntries('Character', this)">Characters</button>
+        <button type="button" class="btn btn-outline-success filter-btn" onclick="filterEntries('Location', this)">Locations</button>
+    </div>
+
+    <table class="table table-dark table-hover border-danger">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Info (Platform/Affil.)</th>
+                <th>Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="entriesTable">
+            @foreach (var item in Model)
+            {
+                <tr class="entry-row" data-category="@(item.Category ?? "Game")">
+                    <td>
+                        @if (item.Category == "Character")
+                        {
+                            <span class="badge bg-info text-dark">Character</span>
+                        }
+                        else if (item.Category == "Location")
+                        {
+                            <span class="badge bg-success">Location</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Game</span>
+                        }
+                    </td>
+                    <td class="fw-bold">@item.Name</td>
+                    <td>@item.Platform</td>
+                    <td>@item.ReleaseYear</td>
+                    <td>
+                        <div class="btn-group">
+                            @if (!string.IsNullOrEmpty(item.PageName))
+                            {
+                                @* Trimitere către HomeController unde ai paginile hardcodate *@
+                                <a asp-controller="Home" asp-action="@item.PageName" class="btn btn-sm btn-info">Details</a>
+                            }
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="Games" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+
+                                <form asp-controller="Games" asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Delete this record?');" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function filterEntries(category, btnElement) {
+            // 1. Filtrare rânduri
+            const rows = document.querySelectorAll('.entry-row');
+            rows.forEach(row => {
+                const rowCat = row.getAttribute('data-category');
+                if (category === 'all' || rowCat === category) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // 2. Update vizual butoane
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if(btnElement) {
+                btnElement.classList.add('active');
+            }
+        }
+    </script>
+}

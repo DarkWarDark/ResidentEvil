@@ -1,0 +1,37 @@
+﻿@model ResidentEvil.Models.Profiles
+
+<div class="container mt-4">
+    <div class="card bg-dark text-white border-danger shadow-lg">
+        <div class="row g-0">
+            <div class="col-md-4 p-4 text-center border-end border-danger">
+                @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+                {
+                    <img src="@Model.AvatarUrl" class="img-fluid rounded border border-secondary shadow" alt="Agent Avatar">
+                }
+                else
+                {
+                    <img src="https://via.placeholder.com/200?text=NO+IMAGE" class="img-fluid rounded border border-secondary" alt="No Avatar">
+                }
+                <h4 class="mt-3 text-danger">AGENT STATUS: ACTIVE</h4>
+            </div>
+            <div class="col-md-8 p-4">
+                <h2 class="text-uppercase border-bottom border-danger pb-2">User Profile</h2>
+
+                <div class="mt-4">
+                    <p class="fs-5"><strong>Personal Bio:</strong></p>
+                    <p class="text-secondary italic">"@Model.Bio"</p>
+                </div>
+
+                <div class="mt-4">
+                    <p class="fs-5"><strong>Specialization (Favorite Game):</strong></p>
+                    <p class="text-info">@Model.FavoriteGame</p>
+                </div>
+
+                <div class="mt-5">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-warning">Update Records</a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-sm btn-outline-secondary">Back to Archive</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

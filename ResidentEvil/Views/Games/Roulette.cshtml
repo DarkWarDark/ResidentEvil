@@ -1,0 +1,88 @@
+﻿@using System.Text.Encodings.Web
+@model IEnumerable<ResidentEvil.Models.Entry>
+
+@* Sunetele încărcate în pagină *@
+<audio id="final-sound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+
+<div class="container text-center mt-5">
+    <h1 class="text-danger mb-4" style="text-shadow: 2px 2px #000;">GAME ROULETTE</h1>
+
+    <div id="roulette-box" class="py-5 my-4 border border-danger rounded bg-dark shadow-lg">
+        <h2 id="game-display" class="text-white display-4">READY?</h2>
+    </div>
+
+    <button id="spin-button" class="btn btn-lg btn-danger px-5 py-3 fw-bold">SPIN THE WHEEL</button>
+
+    <div id="result-link-container" class="mt-4" style="display: none;">
+        <p class="text-white small mb-2">Intel acquired. Proceed to files?</p>
+        <a id="game-link" href="#" class="btn btn-outline-info btn-lg">
+            OPEN FILE: <span id="link-text"></span>
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const entries = [];
+        @foreach (var item in Model)
+        {
+                @:entries.push({ name: "@Html.Raw(item.Name)", page: "@item.PageName" });
+        }
+
+        const btn = document.getElementById('spin-button');
+        const display = document.getElementById('game-display');
+        const linkContainer = document.getElementById('result-link-container');
+        const gameLink = document.getElementById('game-link');
+        const linkText = document.getElementById('link-text');
+        const finalSound = document.getElementById('final-sound');
+
+        // Link direct către un sunet de tip "Click" mecanic
+        const tickUrl = "https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3";
+
+        if (btn) {
+            btn.addEventListener('click', function() {
+                if (entries.length === 0) return;
+
+                // Resetare interfață
+                linkContainer.style.display = 'none';
+                display.classList.remove('animate__animated', 'animate__shakeX');
+                btn.disabled = true;
+
+                let counter = 0;
+                const totalSpins = 20;
+
+                const timer = setInterval(() => {
+                    const randomIndex = Math.floor(Math.random() * entries.length);
+                    const selected = entries[randomIndex];
+
+                    display.innerText = selected.name;
+                    display.style.color = counter % 2 === 0 ? "#ff0000" : "#ffffff";
+
+                    // --- REPARARE SUNET TICK ---
+                    // Cream un obiect nou de sunet la fiecare iterație (clonare)
+                    let audioClone = new Audio(tickUrl);
+                    audioClone.volume = 0.4;
+                    audioClone.play().catch(() => { /* Ignorăm blocarea browserului */ });
+
+                    counter++;
+                    if (counter > totalSpins) {
+                        clearInterval(timer);
+                        btn.disabled = false;
+                        display.style.color = "#ff0000";
+                        display.classList.add('animate__animated', 'animate__shakeX');
+
+                        // Sunetul de final
+                        finalSound.currentTime = 0;
+                        finalSound.play();
+
+                        if (selected.page && selected.page !== "") {
+                            gameLink.href = "/Home/" + selected.page;
+                            linkText.innerText = selected.name;
+                            linkContainer.style.display = 'block';
+                        }
+                    }
+                }, 130); // 130ms oferă timp sunetului să se audă clar
+            });
+        }
+    });
+</script>

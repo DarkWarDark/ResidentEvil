@@ -1,0 +1,34 @@
+﻿@model ResidentEvil.Models.Entry
+@{
+    ViewData["Title"] = "Add New Entry";
+}
+
+<h1>Add to Database</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="wiki-card border-danger">
+            <h4 class="text-danger mb-4">Encryption Terminal</h4>
+            <form asp-action="CreateEntry" method="post">
+                <div class="mb-3">
+                    <label class="form-label text-white">Entry Title</label>
+                    <input asp-for="Name" class="form-control bg-dark text-white border-secondary" placeholder="Ex: Resident Evil Requiem" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Category</label>
+                    <input asp-for="Platform" class="form-control bg-dark text-white border-secondary" placeholder="Ex: Main Game" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Date / Release</label>
+                    <input asp-for="ReleaseYear" class="form-control bg-dark text-white border-secondary" placeholder="Ex: Feb 27, 2026" />
+                </div>
+                <div class="mb-3">
+                    <label class="text-danger">Target Page Name (e.g., RE4, Village)</label>
+                    <input asp-for="PageName" class="form-control bg-dark text-white border-danger" />
+                    <span asp-validation-for="PageName" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-danger w-100">Upload to Database</button>
+            </form>
+        </div>
+    </div>
+</div>

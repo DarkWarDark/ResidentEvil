@@ -1,0 +1,52 @@
+﻿@model ResidentEvil.Models.GalleryItem
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-dark border-danger shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0 font-monospace">☣️ FILE UPLOAD: NEW EVIDENCE</h3>
+                </div>
+                <div class="card-body text-white">
+
+                    <form asp-controller="Games" asp-action="AddPhoto" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="EntryId" class="form-label text-warning fw-bold">Target Subject (Game/Character)</label>
+                            @* Legare nativă cu asp-for din modelul tău *@
+                            <select asp-for="EntryId" class="form-select bg-secondary text-white border-0" asp-items="ViewBag.EntryId">
+                                <option value="">-- Select Archive Entry --</option>
+                            </select>
+                            <span asp-validation-for="EntryId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ImageUrl" class="form-label text-warning fw-bold">Evidence Image URL</label>
+                            <input asp-for="ImageUrl" class="form-control bg-dark text-white border-secondary" placeholder="https://example.com/image.jpg" required />
+                            <span asp-validation-for="ImageUrl" class="text-danger small"></span>
+                            <div class="form-text text-muted extra-small" style="font-size: 0.75rem; opacity: 0.7;">
+                                ⚠️ *Atenție: Faceți click dreapta pe poza de pe Google și alegeți "Copy image address". Link-ul trebuie să se termine în .jpg sau .png!*
+                            </div>
+                        </div>
+
+                        @* REPARAȚIA PERFECTĂ: Folosim proprietatea ta reală numită Caption! *@
+                        <div class="mb-3">
+                            <label asp-for="Caption" class="form-label text-warning fw-bold">Caption / Observations</label>
+                            <input asp-for="Caption" class="form-control bg-dark text-white border-secondary" placeholder="Mansion, Nemesis, Raccoon City..." />
+                            <span asp-validation-for="Caption" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-danger fw-bold shadow">SAVE TO ARCHIVE</button>
+                            <a asp-controller="Games" asp-action="Gallery" class="btn btn-outline-light">CANCEL</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

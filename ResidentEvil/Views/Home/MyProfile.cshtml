@@ -1,0 +1,17 @@
+﻿@model ResidentEvil.Models.Profiles
+
+<div class="container mt-5 text-white bg-dark p-5 border border-danger">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.AvatarUrl" class="img-fluid border border-danger" alt="Avatar">
+        </div>
+        <div class="col-md-8">
+            <h1 class="text-danger text-uppercase">Profile Decrypted</h1>
+            <hr class="bg-danger">
+            <p><strong>Bio:</strong> @Model.Bio</p>
+            <p><strong>Favorite Game:</strong> @Model.FavoriteGame</p>
+
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning mt-3">Update Profile</a>
+        </div>
+    </div>
+</div>

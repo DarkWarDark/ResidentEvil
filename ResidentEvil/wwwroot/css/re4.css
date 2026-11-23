@@ -1,0 +1,35 @@
+body {
+    background-color: #0b0b0b;
+    color: #cccccc;
+    
+}
+
+p {
+    font-family: Arial;
+}
+   
+
+#wiki-sidebar {
+    background-color: #151515;
+    min-height: 100vh;
+    border-right: 2px solid #ff0000;
+    padding: 20px;
+    position: fixed;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.nav-link {
+    color: #ffffff !important;
+    border-bottom: 1px solid #222;
+}
+.nav-link:hover {
+    background-color: #ff0000;
+    color: white !important;
+}
+
+h1 {
+    color: #fffb00; 
+    text-align: left; 
+    margin-bottom: 30px;
+    font-family: 'Courier New', Courier, monospace;
+}

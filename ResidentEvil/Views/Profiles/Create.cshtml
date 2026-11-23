@@ -1,0 +1,25 @@
+﻿@model ResidentEvil.Models.Profiles
+
+<h2 class="text-danger">AGENT REGISTRATION</h2>
+<hr class="bg-danger" />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" class="bg-dark p-4 border border-danger text-white">
+            <div class="mb-3">
+                <label class="form-label">Biography / Background</label>
+                <textarea asp-for="Bio" class="form-control bg-secondary text-white" rows="3" placeholder="Ex: Umbrella Security Service Agent..."></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Favorite Resident Evil Game</label>
+                <input asp-for="FavoriteGame" class="form-control bg-secondary text-white" placeholder="Ex: Resident Evil 2 Remake" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Avatar URL (Image Link)</label>
+                <input asp-for="AvatarUrl" class="form-control bg-secondary text-white" placeholder="https://..." />
+            </div>
+
+            <button type="submit" class="btn btn-outline-danger w-100">INITIALIZE PROFILE</button>
+        </form>
+    </div>
+</div>

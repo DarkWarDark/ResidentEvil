@@ -1,0 +1,92 @@
+
+body {
+    background-color: #0b0b0b;
+    color: #cccccc;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h1 {
+    color: #ff0000; 
+    text-align: center; 
+    margin-bottom: 30px;
+}
+
+#wiki-sidebar {
+    background-color: #151515;
+    min-height: 100vh;
+    border-right: 2px solid #ff0000;
+    padding: 20px;
+    position: fixed;
+}
+
+.wiki-card {
+    background-color: #1a1a1a;
+    border: 1px solid #333; 
+    padding: 20px; 
+    border-radius: 5px; 
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(255, 0, 0, 0.1);
+}
+
+
+.large-text {
+    font-size: 25px;
+}
+
+#img1 {
+    width: 100%;
+    border: 1px solid #444;
+    box-shadow: 3px 3px 15px #000;
+}
+
+.nav-link {
+    color: #ffffff !important;
+    border-bottom: 1px solid #222;
+}
+.nav-link:hover {
+    background-color: #ff0000;
+    color: white !important;
+}
+
+.game-box {
+    background-color: #000;
+    border: 1px solid #bc0000; 
+    padding: 10px;
+    height: 100%;
+}
+
+.game-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid #333;
+}
+
+.game-info h6 {
+    color: #fbff00;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-family: 'Arial', monospace;
+}
+
+.game-info span {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.game-link {
+    text-decoration: none; 
+    color: inherit; 
+    display: block; 
+}
+
+.game-link:hover .game-box {
+    border-color: #bc0000; 
+    transform: translateY(-5px); 
+    transition: transform 0.2s, border-color 0.2s;
+    box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3); 
+}
+
+.game-link .game-info h6 {
+    color: #fbff00; 
+}
