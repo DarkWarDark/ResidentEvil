@@ -3,7 +3,10 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-danger">SECURE GALLERY</h1>
-        <a asp-controller="Games" asp-action="AddPhoto" class="btn btn-danger">+ ADD PHOTO</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-controller="Games" asp-action="AddPhoto" class="btn btn-danger">+ ADD PHOTO</a>
+        }
     </div>
 
     <div class="row">
@@ -25,15 +28,18 @@
 
                             <p class="text-white small mb-2">Subject: @(item.Entry?.Name ?? "Unknown")</p>
 
-                            <div class="d-flex gap-2 justify-content-center">
-                                @* edit e un link (GET) *@
-                                <a asp-action="EditPhoto" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Edit</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="d-flex gap-2 justify-content-center">
+                                    @* edit e un link (GET) *@
+                                    <a asp-action="EditPhoto" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Edit</a>
 
-                                @* delete post formular *@
-                                <form asp-action="DeletePhoto" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Confirm archive deletion?');">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                </form>
-                            </div>
+                                    @* delete post formular *@
+                                    <form asp-action="DeletePhoto" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Confirm archive deletion?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
