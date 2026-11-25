@@ -3,6 +3,7 @@ namespace ResidentEvil.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using ResidentEvil.Models;
 using ResidentEvil.Services;
+using Microsoft.AspNetCore.Authorization;
 
 public class HomeController : Controller
 {
@@ -19,7 +20,7 @@ public class HomeController : Controller
     public IActionResult Entries() => View(_entryService.GetAllEntries());
     public async Task<IActionResult> Details(int id)
     {
-        // Căutăm intrarea în baza de date după ID
+        // Searching by ID
         var entry = await _entryService.GetEntryByIdAsync(id);
 
         if (entry == null)
@@ -27,7 +28,7 @@ public class HomeController : Controller
             return NotFound();
         }
 
-        return View(entry); // Te va trimite la Views/Home/Details.cshtml
+        return View(entry); // Views/Home/Details.cshtml
     }
     public IActionResult RE4()
     {
@@ -69,6 +70,8 @@ public class HomeController : Controller
         return RedirectToAction("Entries");
     }
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public IActionResult CreateEntry(Entry entry)
     {
         if (ModelState.IsValid)

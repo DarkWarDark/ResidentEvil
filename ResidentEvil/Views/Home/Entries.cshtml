@@ -59,9 +59,11 @@
                             {
                                 <a asp-controller="Games" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
 
-                                <form asp-controller="Games" asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Delete this record?');" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
+                                <button type="button" class="btn btn-sm btn-danger"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        data-id="@item.Id" data-name="@item.Name">
+                                    Delete
+                                </button>
                             }
                         </div>
                     </td>
@@ -71,27 +73,27 @@
     </table>
 </div>
 
-@section Scripts {
-    <script>
-        function filterEntries(category, btnElement) {
-            // 1. Filtrare rânduri
-            const rows = document.querySelectorAll('.entry-row');
-            rows.forEach(row => {
-                const rowCat = row.getAttribute('data-category');
-                if (category === 'all' || rowCat === category) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true"
+     data-delete-url="@Url.Action("Delete", "Games")">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white border-danger">
+            <div class="modal-header border-danger">
+                <h5 class="modal-title text-danger">CONFIRM DELETION</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Delete <strong id="deleteName"></strong> from the archive? This cannot be undone.
+            </div>
+            <div class="modal-footer border-danger">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" asp-controller="Games" asp-action="Delete" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-            // 2. Update vizual butoane
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            if(btnElement) {
-                btnElement.classList.add('active');
-            }
-        }
-    </script>
+@section Scripts {
+    <script src="~/js/entries.js" asp-append-version="true"></script>
 }

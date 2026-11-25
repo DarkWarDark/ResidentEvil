@@ -16,13 +16,12 @@ namespace ResidentEvil.Controllers
             _repo = repo;
         }
 
-        // --- VIZUALIZARE PROFIL ---
+        // VIEW PROFILE
         public IActionResult MyProfile()
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return RedirectToAction("Login", "Account");
 
-            // Căutăm profilul comparând direct ca string
             var profile = _repo.Profiles.FindByCondition(p => p.UsersId == currentUserId).FirstOrDefault();
 
             if (profile == null)
@@ -33,7 +32,7 @@ namespace ResidentEvil.Controllers
             return View(profile);
         }
 
-        // --- CREARE PROFIL (GET) ---
+        // CREATE PROFILE (GET)
         public IActionResult Create()
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -45,7 +44,7 @@ namespace ResidentEvil.Controllers
             return View();
         }
 
-        // --- CREARE PROFIL (POST) ---
+        // CREATE PROFILE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Profiles profile)
@@ -58,7 +57,7 @@ namespace ResidentEvil.Controllers
                 Bio = profile.Bio,
                 FavoriteGame = profile.FavoriteGame,
                 AvatarUrl = profile.AvatarUrl,
-                UsersId = currentUserId // String la String
+                UsersId = currentUserId // String to string
             };
 
             ModelState.Clear();
@@ -76,7 +75,7 @@ namespace ResidentEvil.Controllers
             }
         }
 
-        // --- EDITARE PROFIL (GET) ---
+        // EDIT PROFILE (GET)
      
         public IActionResult Edit(int id)
         {
@@ -92,8 +91,7 @@ namespace ResidentEvil.Controllers
             return View(profile);
         }
 
-        // --- EDITARE PROFIL (POST) ---
-
+        // EDIT PROFILE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Profiles profile)
@@ -103,14 +101,19 @@ namespace ResidentEvil.Controllers
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return RedirectToAction("Login", "Account");
 
-            
-            profile.UsersId = currentUserId;
+            // Loading the profile from the database
+            var existing = _repo.Profiles.FindByCondition(p => p.Id == id).FirstOrDefault();
+            if (existing == null) return NotFound();
+            if (existing.UsersId != currentUserId) return Forbid();
 
-            ModelState.Clear();
+            // Copy only the fields the user is allowed to change
+            existing.Bio = profile.Bio;
+            existing.FavoriteGame = profile.FavoriteGame;
+            existing.AvatarUrl = profile.AvatarUrl;
 
             try
             {
-                _repo.Profiles.Update(profile);
+                _repo.Profiles.Update(existing);
                 _repo.Save();
                 return RedirectToAction("MyProfile");
             }
