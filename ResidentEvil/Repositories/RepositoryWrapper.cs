@@ -18,7 +18,6 @@ namespace ResidentEvil.Repositories
             _repoContext = repositoryContext;
         }
 
-        // O lăsăm activă aici doar pentru compatibilitate cu codul vechi (rezolvă cele 8 erori)
         public IUserRepository Users => _users ??= new UserRepository(_repoContext);
 
         public IGameRepository Game => _game ??= new GameRepository(_repoContext);
@@ -53,5 +52,6 @@ namespace ResidentEvil.Repositories
         {
             _repoContext.SaveChanges();
         }
+        public Task SaveAsync() => _repoContext.SaveChangesAsync();
     }
 }

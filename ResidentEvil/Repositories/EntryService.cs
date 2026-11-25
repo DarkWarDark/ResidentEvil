@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ResidentEvil.Models;
 using ResidentEvil.Repositories;
-using Microsoft.EntityFrameworkCore;
+
 namespace ResidentEvil.Services
 {
     public class EntryService : IEntryService
@@ -13,105 +13,77 @@ namespace ResidentEvil.Services
             _repository = repository;
         }
 
-        // ==========================================
-        // METODE PENTRU ENTRIES (JOCURI/PERSONAJE)
-        // ==========================================
+        // ---------- ENTRIES ----------
 
-        public async Task<IEnumerable<Entry>> GetAllEntriesAsync()
-        {
-            return _repository.Entry.FindAll().ToList();
-        }
+        public async Task<IEnumerable<Entry>> GetAllEntriesAsync() =>
+            await _repository.Entry.FindAll().ToListAsync();
 
-        public async Task<Entry> GetEntryByIdAsync(int id)
-        {
-            return _repository.Entry.FindByCondition(e => e.Id == id).FirstOrDefault();
-        }
+        public async Task<Entry> GetEntryByIdAsync(int id) =>
+            await _repository.Entry.FindByCondition(e => e.Id == id).FirstOrDefaultAsync();
 
         public async Task CreateEntryAsync(Entry entry)
         {
             _repository.Entry.Create(entry);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
 
         public async Task UpdateEntryAsync(Entry entry)
         {
             _repository.Entry.Update(entry);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
 
         public async Task DeleteEntryAsync(int id)
         {
-            var entry = _repository.Entry.FindByCondition(e => e.Id == id).FirstOrDefault();
+            var entry = await GetEntryByIdAsync(id);
             if (entry != null)
             {
                 _repository.Entry.Delete(entry);
-                _repository.Save();
+                await _repository.SaveAsync();
             }
         }
 
         public async Task<IEnumerable<Entry>> SearchEntriesAsync(string term)
         {
             if (string.IsNullOrWhiteSpace(term))
-                return _repository.Entry.FindAll().ToList();
+                return await GetAllEntriesAsync();
 
-            return _repository.Entry.FindByCondition(e => e.Name.Contains(term)).ToList();
+            return await _repository.Entry
+                .FindByCondition(e => e.Name.Contains(term))
+                .ToListAsync();
         }
 
-        // ==========================================
-        // METODE PENTRU GALERIE (IMAGINI)
-        // ==========================================
+        // ---------- GALLERY ----------
 
-        // ==========================================
-        // METODE PENTRU GALERIE (IMAGINI)
-        // ==========================================
-
-        public async Task<IEnumerable<GalleryItem>> GetAllGalleryItemsAsync()
-        {
-            // REPARAȚIE CRITICĂ: 
-            // În loc de .FindAll().ToList(), îi spunem repository-ului să caute tot, 
-            // dar trecem prin FindByCondition ca să putem forța încărcarea obiectului virtual legat 'Entry'.
-            // Dacă FindAll() returnează IQueryable, codul de mai jos va face un JOIN corect în baza de date.
-
-            var photos = _repository.GalleryItem.FindAll();
-
-            // Pentru siguranță, dacă baza de date nu face lazy loading automat, mapăm manual/forțăm includerea:
-            foreach (var photo in photos)
-            {
-                if (photo.Entry == null && photo.EntryId != 0)
-                {
-                    // Încărcăm manual subiectul corespunzător pentru fiecare poză ca să nu mai fie "Unknown"
-                    photo.Entry = _repository.Entry.FindByCondition(e => e.Id == photo.EntryId).FirstOrDefault();
-                }
-            }
-
-            return photos.ToList();
-        }
+        public async Task<IEnumerable<GalleryItem>> GetAllGalleryItemsAsync() =>
+            await _repository.GalleryItem.GetAllWithEntryAsync();
 
         public async Task AddGalleryItemAsync(GalleryItem item)
         {
             _repository.GalleryItem.Create(item);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
 
         public async Task UpdateGalleryItemAsync(GalleryItem item)
         {
             _repository.GalleryItem.Update(item);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
 
         public async Task DeleteGalleryItemAsync(int id)
         {
-            var item = _repository.GalleryItem.FindByCondition(g => g.Id == id).FirstOrDefault();
+            var item = await _repository.GalleryItem
+                .FindByCondition(g => g.Id == id)
+                .FirstOrDefaultAsync();
+
             if (item != null)
             {
                 _repository.GalleryItem.Delete(item);
-                _repository.Save();
+                await _repository.SaveAsync();
             }
         }
 
-        // ==========================================
-        // METODE SINCRONE (PENTRU HOME CONTROLLER)
-        // ==========================================
+        // ---------- SYNC (kept only for HomeController) ----------
 
         public IEnumerable<Entry> GetAllEntries() => _repository.Entry.FindAll().ToList();
 

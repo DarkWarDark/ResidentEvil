@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ResidentEvil")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0e1a0269e7a742c698c68b53e30e0953b63f0073")]
 [assembly: System.Reflection.AssemblyProductAttribute("ResidentEvil")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ResidentEvil")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

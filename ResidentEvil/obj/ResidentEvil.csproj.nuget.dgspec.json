@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\sitefinal\\ResidentEvil\\ResidentEvil\\ResidentEvil.csproj": {}
+    "D:\\ResidentEvil\\ResidentEvil\\ResidentEvil.csproj": {}
   },
   "projects": {
-    "E:\\sitefinal\\ResidentEvil\\ResidentEvil\\ResidentEvil.csproj": {
+    "D:\\ResidentEvil\\ResidentEvil\\ResidentEvil.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\sitefinal\\ResidentEvil\\ResidentEvil\\ResidentEvil.csproj",
+        "projectUniqueName": "D:\\ResidentEvil\\ResidentEvil\\ResidentEvil.csproj",
         "projectName": "ResidentEvil",
-        "projectPath": "E:\\sitefinal\\ResidentEvil\\ResidentEvil\\ResidentEvil.csproj",
-        "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
-        "outputPath": "E:\\sitefinal\\ResidentEvil\\ResidentEvil\\obj\\",
+        "projectPath": "D:\\ResidentEvil\\ResidentEvil\\ResidentEvil.csproj",
+        "packagesPath": "C:\\Users\\claud\\.nuget\\packages\\",
+        "outputPath": "D:\\ResidentEvil\\ResidentEvil\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\claud\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,7 +46,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "11.0.100"
       },
       "frameworks": {
         "net10.0": {
@@ -112,7 +113,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\11.0.100/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
