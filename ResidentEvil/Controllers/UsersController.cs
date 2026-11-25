@@ -6,20 +6,22 @@ using ResidentEvil.Services;
 
 namespace ResidentEvil.Controllers
 {
-    [Authorize(Roles = "Admin")] // Doar adminii umblă aici!
+    [Authorize(Roles = "Admin")] 
     public class UsersController : Controller
     {
         private readonly IRepositoryWrapper _repo;
         public UsersController(IRepositoryWrapper repo) => _repo = repo;
 
-        // Afișează toți utilizatorii (Pagina CRUD nr. 2)
+        // All users
         public IActionResult Index()
         {
             var users = _repo.Users.FindAll().ToList();
             return View(users);
         }
 
-        // Ștergere utilizator
+        // Delete user
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var user = _repo.Users.FindByCondition(u => u.Id == id).FirstOrDefault();
