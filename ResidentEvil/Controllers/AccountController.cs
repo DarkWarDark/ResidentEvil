@@ -15,6 +15,7 @@ namespace ResidentEvil.Controllers
 
         // REGISTER
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register() => View();
 
         [HttpPost]
@@ -33,7 +34,6 @@ namespace ResidentEvil.Controllers
                 return RedirectToAction("Login");
             }
 
-            // we show the errors in the view if registration fails
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
@@ -43,12 +43,19 @@ namespace ResidentEvil.Controllers
 
         //  LOGIN
         [HttpGet]
-        public IActionResult Login() => View();
+        [AllowAnonymous]
+        public IActionResult Login(string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string username, string password, bool rememberMe)
+        public async Task<IActionResult> Login(string username, string password, bool rememberMe, string? returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
+
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 ModelState.AddModelError("", "All fields are required!");
@@ -56,9 +63,20 @@ namespace ResidentEvil.Controllers
             }
 
             var result = await _authService.LoginAsync(username, password, rememberMe);
+
             if (result.Succeeded)
             {
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return LocalRedirect(returnUrl);
+                }
                 return RedirectToAction("Index", "Home");
+            }
+
+            if (result.IsLockedOut)
+            {
+                ModelState.AddModelError("", "Account locked for 5 minutes after too many failed attempts.");
+                return View();
             }
 
             ModelState.AddModelError("", "Access Denied: Invalid Username or Password!");
@@ -67,18 +85,16 @@ namespace ResidentEvil.Controllers
 
         // LOGOUT
         [HttpPost]
-        [ValidateAntiForgeryToken] // protection
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // this deletes cookies and signs out the user
             await _authService.LogoutAsync();
-
-            // redirect to home page after logout
             return RedirectToAction("Index", "Home");
         }
+
+        // ACCESS DENIED
         [HttpGet]
         [AllowAnonymous]
         public IActionResult AccessDenied() => View();
     }
-
 }
