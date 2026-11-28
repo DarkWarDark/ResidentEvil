@@ -8,8 +8,8 @@
             <dt class="col-sm-3 text-info">Title</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
 
-            <dt class="col-sm-3 text-info">Release Year</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.ReleaseYear)</dd>
+            <dt class="col-sm-3 text-info">Release Date</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ReleaseYear.ToString("dd MMM yyyy"))</dd>
 
             <dt class="col-sm-3 text-info">Platform</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.Platform)</dd>
