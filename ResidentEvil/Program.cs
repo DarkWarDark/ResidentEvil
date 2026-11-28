@@ -12,13 +12,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // repositories
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IEntryRepository, EntryRepository>();
 
 // services
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IGamesService, GamesService>();
 builder.Services.AddScoped<IEntryService, EntryService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
