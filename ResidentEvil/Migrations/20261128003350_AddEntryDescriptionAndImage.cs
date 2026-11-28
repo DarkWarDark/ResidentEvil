@@ -1,0 +1,38 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace ResidentEvil.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddEntryDescriptionAndImage : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AddColumn<string>(
+                name: "Description",
+                table: "Entries",
+                type: "TEXT",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "ImageUrl",
+                table: "Entries",
+                type: "TEXT",
+                nullable: true);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropColumn(
+                name: "Description",
+                table: "Entries");
+
+            migrationBuilder.DropColumn(
+                name: "ImageUrl",
+                table: "Entries");
+        }
+    }
+}

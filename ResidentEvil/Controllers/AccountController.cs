@@ -13,7 +13,7 @@ namespace ResidentEvil.Controllers
             _authService = authService;
         }
 
-        // --- REGISTER ---
+        // REGISTER
         [HttpGet]
         public IActionResult Register() => View();
 
@@ -33,7 +33,7 @@ namespace ResidentEvil.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Dacă Identity refuză parola (ex: e prea scurtă), afișăm erorile primite din serviciu
+            // we show the errors in the view if registration fails
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
@@ -41,7 +41,7 @@ namespace ResidentEvil.Controllers
             return View();
         }
 
-        // --- LOGIN ---
+        //  LOGIN
         [HttpGet]
         public IActionResult Login() => View();
 
@@ -65,16 +65,20 @@ namespace ResidentEvil.Controllers
             return View();
         }
 
-        // --- LOGOUT ---
+        // LOGOUT
         [HttpPost]
-        [ValidateAntiForgeryToken] // Protecție obligatorie împotriva atacurilor malițioase
+        [ValidateAntiForgeryToken] // protection
         public async Task<IActionResult> Logout()
         {
-            // Apelăm serviciul nou care va șterge cookie-ul Identity.Application
+            // this deletes cookies and signs out the user
             await _authService.LogoutAsync();
 
-            // Redirecționăm utilizatorul către pagina principală
+            // redirect to home page after logout
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied() => View();
     }
+
 }
