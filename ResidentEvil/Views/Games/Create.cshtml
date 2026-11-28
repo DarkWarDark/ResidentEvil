@@ -24,9 +24,18 @@
                            placeholder="https://..." />
                 </div>
                 <div class="mb-3">
+                    <label asp-for="VideoUrl" class="text-danger fw-bold">Video URL</label>
+                    <input asp-for="VideoUrl" class="form-control bg-dark text-white border-secondary"
+                           placeholder="/videos/trailer.mp4 or a YouTube link" />
+                </div>
+                <div class="mb-3">
                     <label asp-for="Description" class="text-danger fw-bold">Description</label>
                     <textarea asp-for="Description" rows="6"
                               class="form-control bg-dark text-white border-secondary"></textarea>
+                </div>
+                <div class="form-check mb-3">
+                    <input asp-for="IsFeatured" class="form-check-input" />
+                    <label asp-for="IsFeatured" class="form-check-label">Show on the home page</label>
                 </div>
                 <div class="form-group mb-3">
                     <label class="text-danger fw-bold">Select Type</label>

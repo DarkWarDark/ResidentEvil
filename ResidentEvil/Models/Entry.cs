@@ -10,7 +10,9 @@
         public string Category { get; set; } // game/character/location
 
         public string? Description { get; set; }
-        public string? ImageUrl { get; set; }   
+        public string? ImageUrl { get; set; }
+        public string? VideoUrl { get; set; }
+        public bool IsFeatured { get; set; }
     }
 }
 

@@ -2,8 +2,8 @@ namespace ResidentEvil.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using ResidentEvil.Models;
-using ResidentEvil.Services;
 using Microsoft.AspNetCore.Authorization;
+using ResidentEvil.Services;
 
 public class HomeController : Controller
 {
@@ -14,7 +14,7 @@ public class HomeController : Controller
         _entryService = entryService;
     }
 
-    public IActionResult Index() => View();
+    public async Task<IActionResult> Index() => View(await _entryService.GetFeaturedEntriesAsync());
     public IActionResult Story() => View();
     public IActionResult Gallery() => View();
     public IActionResult Entries() => View(_entryService.GetAllEntries());
@@ -30,22 +30,6 @@ public class HomeController : Controller
 
         return View(entry); // Views/Home/Details.cshtml
     }
-    public IActionResult RE4()
-    {
-        return View(); 
-    }
-    public IActionResult Requiem()
-    {
-        return View(); 
-    }
-    public IActionResult REVILLAGE()
-    {
-        return View();
-    }
-    public IActionResult RE3()
-    {
-        return View();
-    }
 
     public async Task<IActionResult> SearchRedirect(string searchTerm)
     {
@@ -59,12 +43,7 @@ public class HomeController : Controller
 
         if (entry != null)
         {
-            if (string.IsNullOrEmpty(entry.PageName) || entry.PageName == "Details")
-            {
-                return RedirectToAction("Details", new { id = entry.Id });
-            }
-
-            return RedirectToAction(entry.PageName);
+            return RedirectToAction("Details", new { id = entry.Id });
         }
 
         TempData["Error"] = "File not found in Umbrella database!";

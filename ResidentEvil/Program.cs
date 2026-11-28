@@ -3,6 +3,7 @@ using ResidentEvil.Services;
 using ResidentEvil.Repositories;
 using ResidentEvil.Data;
 using Microsoft.AspNetCore.Identity;
+using ResidentEvil.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

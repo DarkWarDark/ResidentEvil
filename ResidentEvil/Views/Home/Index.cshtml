@@ -1,3 +1,4 @@
+@model IEnumerable<ResidentEvil.Models.Entry>
 @{
     ViewData["Title"] = "Home";
 }
@@ -16,51 +17,37 @@
 </div>
 
 <div class="row text-center">
-    <div class="col-md-3 mb-4">
-        <a asp-controller="Home" asp-action="Requiem" class="game-link">
-            <div class="game-box">
-                <img src="~/photos/re9.jpg" class="game-img" alt="RE Requiem">
-                <div class="game-info">
-                    <h6><i>Resident Evil Requiem</i></h6>
-                    <span>(2026)</span>
-                </div>
-            </div>
-        </a>
-    </div>
+    @foreach (var item in Model)
+    {
+        // Entries with a hand-written page go to it; all others use the generic Details page
+        var generic = string.IsNullOrEmpty(item.PageName) || item.PageName == "Details";
+        var action = generic ? "Details" : item.PageName;
+        int? entryId = generic ? item.Id : (int?)null;
 
-    <div class="col-md-3 mb-4">
-        <a asp-controller="Home" asp-action="re4" class="game-link">
-            <div class="game-box">
-                <img src="~/photos/re4.jpg" class="game-img" alt="RE4 Remake">
-                <div class="game-info">
-                    <h6><i>Resident Evil 4</i></h6>
-                    <span>(2023)</span>
+        <div class="col-md-3 mb-4">
+            <a asp-controller="Home" asp-action="@action" asp-route-id="@entryId" class="game-link">
+                <div class="game-box">
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" class="game-img" alt="@item.Name">
+                    }
+                    else
+                    {
+                        <div class="game-img d-flex align-items-center justify-content-center bg-dark text-secondary">
+                            No image
+                        </div>
+                    }
+                    <div class="game-info">
+                        <h6><i>@item.Name</i></h6>
+                        <span>(@item.ReleaseYear.Year)</span>
+                    </div>
                 </div>
-            </div>
-        </a>
-    </div>
+            </a>
+        </div>
+    }
 
-    <div class="col-md-3 mb-4">
-        <a asp-controller="Home" asp-action="revillage" asp-route-id="3" class="game-link">
-            <div class="game-box">
-                <img src="~/photos/revillage.jpg" class="game-img" alt="RE Village">
-                <div class="game-info">
-                    <h6><i>Resident Evil Village</i></h6>
-                    <span>(2021)</span>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-md-3 mb-4">
-        <a asp-controller="Home" asp-action="re3" asp-route-id="4" class="game-link">
-            <div class="game-box">
-                <img src="~/photos/re3.jpg" class="game-img" alt="RE3 Remake">
-                <div class="game-info">
-                    <h6><i>Resident Evil 3</i></h6>
-                    <span>(2020)</span>
-                </div>
-            </div>
-        </a>
-    </div>
+    @if (!Model.Any())
+    {
+        <p class="text-secondary">No featured entries yet.</p>
+    }
 </div>

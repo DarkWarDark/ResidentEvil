@@ -18,6 +18,12 @@ namespace ResidentEvil.Services
         public async Task<IEnumerable<Entry>> GetAllEntriesAsync() =>
             await _repository.Entry.FindAll().ToListAsync();
 
+        public async Task<IEnumerable<Entry>> GetFeaturedEntriesAsync() =>
+            await _repository.Entry
+                .FindByCondition(e => e.IsFeatured)
+                .OrderByDescending(e => e.ReleaseYear)
+                .ToListAsync();
+
         public async Task<Entry> GetEntryByIdAsync(int id) =>
             await _repository.Entry.FindByCondition(e => e.Id == id).FirstOrDefaultAsync();
 
@@ -83,7 +89,7 @@ namespace ResidentEvil.Services
             }
         }
 
-        // SYNC (kept only for HomeController)
+        // SYNC 
 
         public IEnumerable<Entry> GetAllEntries() => _repository.Entry.FindAll().ToList();
 
