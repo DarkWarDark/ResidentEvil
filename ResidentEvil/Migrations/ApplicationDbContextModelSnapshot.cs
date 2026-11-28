@@ -225,6 +225,9 @@ namespace ResidentEvil.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -237,6 +240,9 @@ namespace ResidentEvil.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ReleaseYear")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VideoUrl")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

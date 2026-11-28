@@ -1,41 +1,108 @@
 ﻿@model ResidentEvil.Models.Entry
+@using System.Text.RegularExpressions
 
-<div class="container mt-5">
-    <div class="card bg-dark text-white border-danger shadow-lg">
-        <div class="card-header border-danger text-center">
-            <h1 class="text-danger">DATABASE FILE: @Model.Name</h1>
+@functions {
+    // Returns a YouTube embed URL, or null when the link is not a YouTube video link
+    static string? YouTubeEmbed(string url)
+    {
+        if (!Uri.TryCreate(url.Trim(), UriKind.Absolute, out var uri)) return null;
+
+        var host = uri.Host.ToLowerInvariant();
+        string? id = null;
+
+        if (host == "youtu.be")
+        {
+            id = uri.AbsolutePath.Trim('/');
+        }
+        else if (host.EndsWith("youtube.com") || host.EndsWith("youtube-nocookie.com"))
+        {
+            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            if (!string.IsNullOrEmpty(query["v"]))
+            {
+                id = query["v"];
+            }
+            else
+            {
+                var parts = uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 2 && (parts[0] == "embed" || parts[0] == "shorts" || parts[0] == "live"))
+                    id = parts[1];
+            }
+        }
+
+        return id != null && Regex.IsMatch(id, "^[A-Za-z0-9_-]{11}$")
+            ? "https://www.youtube.com/embed/" + id
+            : null;
+    }
+}
+
+@{
+    ViewData["Title"] = Model.Name;
+    var embed = string.IsNullOrWhiteSpace(Model.VideoUrl) ? null : YouTubeEmbed(Model.VideoUrl);
+    var looksLikeYouTube = !string.IsNullOrWhiteSpace(Model.VideoUrl) && Model.VideoUrl.Contains("youtu", StringComparison.OrdinalIgnoreCase);
+}
+
+<h1><i>@Model.Name</i></h1>
+
+<div class="row">
+    <div class="col-md-8">
+        @if (embed != null)
+        {
+            <div class="ratio ratio-16x9 mb-4 border border-danger">
+                <iframe src="@embed" title="@Model.Name"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen loading="lazy"></iframe>
+            </div>
+        }
+        else if (looksLikeYouTube)
+        {
+            <div class="alert alert-warning">
+                This YouTube link was not recognized. Use the video's normal link
+                (for example https://www.youtube.com/watch?v=XXXXXXXXXXX).
+            </div>
+        }
+        else if (!string.IsNullOrWhiteSpace(Model.VideoUrl))
+        {
+            <div class="ratio ratio-16x9 mb-4 border border-danger">
+                <video controls poster="@Model.ImageUrl" class="w-100">
+                    <source src="@Model.VideoUrl">
+                </video>
+            </div>
+        }
+
+        <div class="wiki-card p-4">
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <p style="white-space: pre-line;">@Model.Description</p>
+            }
+            else
+            {
+                <p class="text-secondary mb-0">No description has been added yet.</p>
+            }
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                    {
-                        <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded border border-danger" />
-                    }
-                </div>
-                <div class="col-md-8">
-                    <h3 class="text-info">Information</h3>
-                    <p><strong>Type:</strong> @Model.Category</p>
-                    <p><strong>Platform:</strong> @Model.Platform</p>
-                    <p><strong>Release Date:</strong> @Model.ReleaseYear.ToString("dd MMM yyyy")</p>
-                    <hr class="bg-danger">
-                    <h4 class="text-danger">Detailed Description:</h4>
-                    @if (!string.IsNullOrWhiteSpace(Model.Description))
-                    {
-                        <p style="white-space: pre-line;">@Model.Description</p>
-                    }
-                    else
-                    {
-                        <p class="text-secondary">No description has been added yet.</p>
-                    }
+    </div>
+
+    <div class="col-md-4">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="border border-danger">
+                <div class="game-poster-box">
+                    <img src="@Model.ImageUrl" class="img-fluid border border-secondary" alt="@Model.Name">
                 </div>
             </div>
+        }
+
+        <div class="wiki-card p-3 mt-3">
+            <p class="mb-1"><strong>Type:</strong> @Model.Category</p>
+            <p class="mb-1"><strong>Platform:</strong> @Model.Platform</p>
+            <p class="mb-0"><strong>Released:</strong> @Model.ReleaseYear.ToString("dd MMM yyyy")</p>
         </div>
-        <div class="card-footer border-danger">
-            <a asp-action="Entries" class="btn btn-outline-light">Back to Archive</a>
+
+        <div class="mt-3 d-flex gap-2">
+            <a asp-action="Entries" class="btn btn-outline-light btn-sm">Back to Archive</a>
             @if (User.IsInRole("Admin"))
             {
-                <a asp-controller="Games" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-controller="Games" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Edit</a>
             }
         </div>
     </div>

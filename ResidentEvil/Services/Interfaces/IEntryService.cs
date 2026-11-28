@@ -15,8 +15,7 @@ namespace ResidentEvil.Services
         Task AddGalleryItemAsync(GalleryItem item);
         Task DeleteGalleryItemAsync(int id);
         Task UpdateGalleryItemAsync(GalleryItem item);
-
-        // Variantele vechi pentru HomeController (să dispară erorile CS1061)
+        Task<IEnumerable<Entry>> GetFeaturedEntriesAsync();
         IEnumerable<Entry> GetAllEntries();
         void CreateEntry(Entry entry);
     }
