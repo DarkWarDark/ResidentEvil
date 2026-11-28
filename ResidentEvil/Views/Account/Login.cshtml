@@ -8,19 +8,18 @@
                 <div class="card-body">
 
                     <form asp-action="Login" method="post">
-
-                        @* IMPORTANT: Aici vor apărea erorile cu roșu dacă greșești parola/userul *@
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
                         <div asp-validation-summary="All" class="text-danger small mb-3 fw-bold"></div>
 
                         <div class="mb-3">
                             <label class="form-label">Username</label>
-                            @* name="username" trebuie să fie exact ca parametrul din controller *@
+   
                             <input name="username" type="text" class="form-control bg-secondary text-white border-0" required />
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            @* name="password" trebuie să fie exact ca parametrul din controller *@
+                            
                             <input name="password" type="password" class="form-control bg-secondary text-white border-0" required />
                         </div>
 

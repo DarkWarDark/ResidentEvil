@@ -20,17 +20,21 @@ builder.Services.AddScoped<IEntryRepository, EntryRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGamesService, GamesService>();
 builder.Services.AddScoped<IEntryService, EntryService>();
-builder.Services.AddScoped<IAuthService, AuthService>(); // Înregistrare AuthService
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 // login
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
     options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 3;
+    options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
+
+    options.Lockout.AllowedForNewUsers = true;
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
@@ -84,22 +88,44 @@ using (var dbScope = app.Services.CreateScope())
     }
 }
 
-// code seed
+//  seed: ROLES + ADMIN ACCOUNT
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    string[] roleNames = { "Admin", "User" };
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-    Task.Run(async () =>
+    foreach (var roleName in new[] { "Admin", "User" })
     {
-        foreach (var roleName in roleNames)
+        if (!await roleManager.RoleExistsAsync(roleName))
         {
-            if (!await roleManager.RoleExistsAsync(roleName))
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+
+    var adminName = builder.Configuration["AdminSeed:UserName"];
+    var adminPassword = builder.Configuration["AdminSeed:Password"];
+
+    if (!string.IsNullOrWhiteSpace(adminName) && !string.IsNullOrWhiteSpace(adminPassword))
+    {
+        var admin = await userManager.FindByNameAsync(adminName);
+
+        if (admin == null)
+        {
+            admin = new IdentityUser { UserName = adminName, Email = adminName };
+            var created = await userManager.CreateAsync(admin, adminPassword);
+            if (!created.Succeeded)
             {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
+                Console.WriteLine("Admin seed failed: " +
+                    string.Join("; ", created.Errors.Select(e => e.Description)));
+                admin = null;
             }
         }
-    }).GetAwaiter().GetResult();
+
+        if (admin != null && !await userManager.IsInRoleAsync(admin, "Admin"))
+        {
+            await userManager.AddToRoleAsync(admin, "Admin");
+        }
+    }
 }
 
 app.Run();

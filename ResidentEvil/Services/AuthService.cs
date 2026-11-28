@@ -18,7 +18,7 @@ namespace ResidentEvil.Services
             var user = new IdentityUser { UserName = email, Email = email };
             var result = await _userManager.CreateAsync(user, password);
 
-            //se aloca user automat la inregistrare
+            // user at register
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "User");
@@ -29,7 +29,7 @@ namespace ResidentEvil.Services
 
         public async Task<SignInResult> LoginAsync(string email, string password, bool rememberMe)
         {
-            return await _signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure: false);
+            return await _signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure: true);
         }
 
         public async Task LogoutAsync()
