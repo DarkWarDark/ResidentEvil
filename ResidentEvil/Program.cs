@@ -6,26 +6,24 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Configurare Baza de Date (SQLite)
+// sqlite
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 2. Înregistrare REPOSITORIES
+// repositories
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IEntryRepository, EntryRepository>();
 
-// 3. Înregistrare SERVICES
+// services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGamesService, GamesService>();
 builder.Services.AddScoped<IEntryService, EntryService>();
 builder.Services.AddScoped<IAuthService, AuthService>(); // Înregistrare AuthService
 
-// 4. Adăugare suport pentru Controller + Views
-builder.Services.AddControllersWithViews();
 
-// login ---
+// login
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
     options.Password.RequireDigit = false;
@@ -41,7 +39,6 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
 });
 
-// ---  ---
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -49,9 +46,10 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
+
 var app = builder.Build();
 
-// 6. Configurare PIPELINE (Middleware - Ordinea contează foarte mult aici!)
+// pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -59,19 +57,18 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // Foarte important pentru CSS/JS/Imagini
+app.UseStaticFiles(); // css
 
 app.UseRouting();
 
-app.UseAuthentication(); // Pornire motor de autentificare (Identity)
-app.UseAuthorization();  // Control acces roluri
+app.UseAuthentication();
+app.UseAuthorization();  
 
-// 7. DEFINIREA RUTELOR
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// 8. AUTOMIGRARE LA PORNIRE
+// automigration
 using (var dbScope = app.Services.CreateScope())
 {
     var dbServices = dbScope.ServiceProvider;
@@ -87,7 +84,7 @@ using (var dbScope = app.Services.CreateScope())
     }
 }
 
-//  --- CODE SEED PENTRU ROLURI AUTOMATE ---
+// code seed
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();

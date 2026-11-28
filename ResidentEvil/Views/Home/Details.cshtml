@@ -7,8 +7,11 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4">
-                    
+                <div class="col-md-4 mb-3">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded border border-danger" />
+                    }
                 </div>
                 <div class="col-md-8">
                     <h3 class="text-info">Information</h3>
@@ -17,15 +20,23 @@
                     <p><strong>Release Date:</strong> @Model.ReleaseYear.ToString("dd MMM yyyy")</p>
                     <hr class="bg-danger">
                     <h4 class="text-danger">Detailed Description:</h4>
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <p style="white-space: pre-line;">@Model.Description</p>
+                    }
+                    else
+                    {
+                        <p class="text-secondary">No description has been added yet.</p>
+                    }
                 </div>
             </div>
         </div>
-        @if (User.IsInRole("Admin"))
-        {
-            <a asp-controller="Games" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-        }
         <div class="card-footer border-danger">
             <a asp-action="Entries" class="btn btn-outline-light">Back to Archive</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Games" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            }
         </div>
     </div>
 </div>

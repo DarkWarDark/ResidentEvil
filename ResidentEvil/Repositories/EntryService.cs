@@ -83,7 +83,7 @@ namespace ResidentEvil.Services
             }
         }
 
-        // ---------- SYNC (kept only for HomeController) ----------
+        // SYNC (kept only for HomeController)
 
         public IEnumerable<Entry> GetAllEntries() => _repository.Entry.FindAll().ToList();
 
