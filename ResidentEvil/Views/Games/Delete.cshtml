@@ -10,7 +10,7 @@
             <dd class="col-sm-9">@Model.Name</dd>
 
             <dt class="col-sm-3">Release Year</dt>
-            <dd class="col-sm-9">@Model.ReleaseYear</dd>
+            <dd class="col-sm-9">@Model.ReleaseYear.ToString("dd MMM yyyy")</dd>
         </dl>
 
         <form asp-action="Delete">

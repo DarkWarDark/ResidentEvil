@@ -19,7 +19,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="ReleaseYear" class="form-label"></label>
-            <input asp-for="ReleaseYear" class="form-control bg-dark text-white border-warning" />
+            <input asp-for="ReleaseYear" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control bg-dark text-white border-warning" />
         </div>
         <div class="mb-3">
             <label asp-for="Platform" class="form-label"></label>
