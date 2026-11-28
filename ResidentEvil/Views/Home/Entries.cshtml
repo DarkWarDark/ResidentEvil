@@ -49,11 +49,12 @@
                     <td>@item.ReleaseYear</td>
                     <td>
                         <div class="btn-group">
-                            @if (!string.IsNullOrEmpty(item.PageName))
-                            {
-                                @* Trimitere către HomeController unde ai paginile hardcodate *@
-                                <a asp-controller="Home" asp-action="@item.PageName" class="btn btn-sm btn-info">Details</a>
+                            @{
+                                var detailsAction = string.IsNullOrEmpty(item.PageName) ? "Details" : item.PageName;
+                                int? detailsId = detailsAction == "Details" ? item.Id : (int?)null;
                             }
+                            <a asp-controller="Home" asp-action="@detailsAction" asp-route-id="@detailsId"
+                               class="btn btn-sm btn-info">Details</a>
 
                             @if (User.IsInRole("Admin"))
                             {

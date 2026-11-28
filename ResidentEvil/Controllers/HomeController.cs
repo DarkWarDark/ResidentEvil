@@ -54,18 +54,19 @@ public class HomeController : Controller
             return RedirectToAction("Entries");
         }
 
-        // Căutăm în baza de date un Entry care să conțină textul căutat în nume
         var entry = (await _entryService.GetAllEntriesAsync())
                     .FirstOrDefault(e => e.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
 
-        // Dacă am găsit jocul și are o pagină (PageName) setată
-        if (entry != null && !string.IsNullOrEmpty(entry.PageName))
+        if (entry != null)
         {
-            // Te trimite direct la metoda care afișează pagina ta manuală (ex: public IActionResult RE4())
+            if (string.IsNullOrEmpty(entry.PageName) || entry.PageName == "Details")
+            {
+                return RedirectToAction("Details", new { id = entry.Id });
+            }
+
             return RedirectToAction(entry.PageName);
         }
 
-        // Dacă nu găsim nimic, ne întoarcem la listă cu un mesaj (opțional)
         TempData["Error"] = "File not found in Umbrella database!";
         return RedirectToAction("Entries");
     }

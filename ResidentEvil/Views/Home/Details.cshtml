@@ -8,18 +8,22 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
-                    @* Presupunând că ai un câmp ImageUrl în baza de date *@
                     
                 </div>
                 <div class="col-md-8">
                     <h3 class="text-info">Information</h3>
+                    <p><strong>Type:</strong> @Model.Category</p>
                     <p><strong>Platform:</strong> @Model.Platform</p>
-                    <p><strong>Release Year:</strong> @Model.ReleaseYear</p>
+                    <p><strong>Release Year:</strong> @Model.ReleaseYear.Year</p>
                     <hr class="bg-danger">
                     <h4 class="text-danger">Detailed Description:</h4>
                 </div>
             </div>
         </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-controller="Games" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        }
         <div class="card-footer border-danger">
             <a asp-action="Entries" class="btn btn-outline-light">Back to Archive</a>
         </div>
