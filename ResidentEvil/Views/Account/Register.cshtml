@@ -1,4 +1,4 @@
-﻿@model ResidentEvil.Models.Users 
+﻿
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -11,18 +11,17 @@
                     
                     <form asp-action="Register" method="post">
                         
-                        @* CRITIC: Linia asta va afișa cu roșu textul exact al erorii dacă înregistrarea eșuează *@
                         <div asp-validation-summary="All" class="text-danger small mb-3 fw-bold"></div>
 
                         <div class="mb-3">
                             <label class="form-label">Username</label>
-                            @* name="username" trebuie să fie identic cu cel din AccountController *@
+                            
                             <input name="username" type="text" class="form-control bg-secondary text-white border-0" required />
                         </div>
                         
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            @* name="password" trebuie să fie identic cu cel din AccountController *@
+                            
                             <input name="password" type="password" class="form-control bg-secondary text-white border-0" required />
                         </div>
                         

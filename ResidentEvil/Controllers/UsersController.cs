@@ -1,37 +1,82 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ResidentEvil.Models;
 using ResidentEvil.Repositories;
-using ResidentEvil.Services;
 
 namespace ResidentEvil.Controllers
 {
-    [Authorize(Roles = "Admin")] 
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IRepositoryWrapper _repo;
-        public UsersController(IRepositoryWrapper repo) => _repo = repo;
 
-        // All users
-        public IActionResult Index()
+        public UsersController(UserManager<IdentityUser> userManager, IRepositoryWrapper repo)
         {
-            var users = _repo.Users.FindAll().ToList();
-            return View(users);
+            _userManager = userManager;
+            _repo = repo;
         }
 
-        // Delete user
+        public async Task<IActionResult> Index()
+        {
+            var list = new List<UserListItem>();
+            foreach (var u in _userManager.Users.OrderBy(u => u.UserName).ToList())
+            {
+                list.Add(new UserListItem
+                {
+                    Id = u.Id,
+                    UserName = u.UserName ?? "",
+                    IsAdmin = await _userManager.IsInRoleAsync(u, "Admin")
+                });
+            }
+            return View(list);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> ToggleAdmin(string id)
         {
-            var user = _repo.Users.FindByCondition(u => u.Id == id).FirstOrDefault();
-            if (user != null)
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            if (user.Id == _userManager.GetUserId(User))
             {
-                _repo.Users.Delete(user);
-                _repo.Save();
+                TempData["Error"] = "You cannot change your own role.";
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction("Index");
+
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+                await _userManager.RemoveFromRoleAsync(user, "Admin");
+            else
+                await _userManager.AddToRoleAsync(user, "Admin");
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            if (user.Id == _userManager.GetUserId(User))
+            {
+                TempData["Error"] = "You cannot delete your own account.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Remove the user's profile first
+            var profile = _repo.Profiles.FindByCondition(p => p.UsersId == id).FirstOrDefault();
+            if (profile != null)
+            {
+                _repo.Profiles.Delete(profile);
+                await _repo.SaveAsync();
+            }
+
+            await _userManager.DeleteAsync(user);
+            return RedirectToAction(nameof(Index));
         }
     }
-
 }

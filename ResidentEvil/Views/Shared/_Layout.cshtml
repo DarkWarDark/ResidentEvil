@@ -25,7 +25,13 @@
                     <a class="nav-link text-light" asp-controller="Home" asp-action="Story">Main Story</a>
                     <a class="nav-link text-light" asp-controller="Games" asp-action="Gallery">Gallery</a>
                     <a class="nav-link text-light" asp-controller="Home" asp-action="Entries">Recent Entries</a>
-                    <a class="nav-link text-warning mb-2" asp-controller="Games" asp-action="Roulette">🎰 Roulette</a>
+                    <a class="nav-link text-warning mb-2" asp-controller="Games" asp-action="Roulette">Roulette</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="Users" asp-action="Index">Users</a>
+                        </li>
+                    }
 
                     <hr class="text-secondary" />
 

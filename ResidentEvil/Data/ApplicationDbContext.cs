@@ -13,16 +13,10 @@ namespace ResidentEvil.Data
         {
         }
 
-        // Tabelele aplicației tale Resident Evil
+        // Application tables (Identity tables come from IdentityDbContext)
         public DbSet<Entry> Entries { get; set; }
-        public DbSet<Game> Games { get; set; }
         public DbSet<Profiles> Profiles { get; set; }
         public DbSet<GalleryItem> GalleryItems { get; set; }
-
-        // NOTĂ: Dacă aveai o logică specială în clasa ta custom 'Users', 
-        // o poți păstra ca tabel secundar sau o poți șterge deoarece 
-        // IdentityDbContext adaugă automat tabelul AspNetUsers gestionat de IdentityUser.
-        // public DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

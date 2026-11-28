@@ -8,12 +8,10 @@ namespace ResidentEvil.Controllers
 {
     public class GamesController : Controller
     {
-        private readonly IGamesService _gamesService;
         private readonly IEntryService _entryService;
 
-        public GamesController(IGamesService gamesService, IEntryService entryService)
+        public GamesController(IEntryService entryService)
         {
-            _gamesService = gamesService;
             _entryService = entryService;
         }
 
